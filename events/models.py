@@ -18,7 +18,9 @@ class Comment(models.Model):
     comment = models.TextField(null=True)
     created = models.DateTimeField(auto_now_add=True,
                                    null=True)
-    rate = models.DecimalField(max_digits=5, decimal_places=1, default=1)
+    rate = models.DecimalField(max_digits=5,
+                               decimal_places=1,
+                               default=1)
     events = models.ForeignKey(Event,
                                on_delete=models.SET_NULL,
                                null=True,
