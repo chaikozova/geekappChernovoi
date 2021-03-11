@@ -3,7 +3,10 @@ from django.db import models
 from user.models import Users
 
 
-class Direction(models.Model):
+class Course(models.Model):
+    class Meta:
+        verbose_name='Курс'
+        verbose_name_plural='Курсы'
     logo = models.ImageField(upload_to='media', max_length=240)
     title = models.CharField(max_length=240)
     months = ArrayField(
