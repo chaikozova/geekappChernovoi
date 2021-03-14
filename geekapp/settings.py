@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'courses',
     'user',
     'events',
+    'rest_framework',
 ]
 
 
