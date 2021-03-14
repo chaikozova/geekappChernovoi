@@ -1,25 +1,59 @@
+from django.contrib.auth import authenticate
 from rest_framework import serializers
 
+from courses.serializers import LevelSerializer, CourseSerializer
 from user.models import Users
 
 
-class UsersSerializer(serializers.ModelSerializer):
+class LoginSerializer(serializers.Serializer):
+    email = serializers.CharField(lebel="email", write_only=True)
+    password = serializers.CharField(lebel="password",
+                                     style={'input_type': 'password'},
+                                     write_only=True,
+                                     trim_whitespace=False)
+    token = serializers.CharField(label='token', read_only=True)
 
+    def validate(self, attrs):
+        email = attrs.get('email')
+        password = attrs.get('password')
+
+        if email and password:
+            user = authenticate(request=self.context.get('request'), email=email, password=password)
+
+            if not user:
+                msg = 'Unable to login with provided credentials.'
+                raise serializers.ValidationError(msg, code='authorization')
+        else:
+            msg = "Must include 'username' and 'password'."
+            raise serializers.ValidationError(msg, code='authorization')
+
+        attrs['user'] = user
+        return attrs
+
+
+class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Users
-        fields = '__all__'
+        fields = ('id', 'email', 'username', 'first_name', 'last_name',
+                  'phone_number', 'telegram', 'instagram', 'github',
+                  'is_staff')
 
-    # def create(self, validated_data):
-    #     return Users.objects.create(**validated_data)
 
-    def update(self, instance, validated_data):
-        instance.username = validated_data.get('username', instance.username)
-        instance.email = validated_data.get('email', instance.email)
-        instance.first_name = validated_data.get('first_name', instance.first_name)
-        instance.last_name = validated_data.get('last_name', instance.last_name)
-        instance.phone = validated_data.get('phone', instance.phone)
-        instance.telegram = validated_data.get('telegram', instance.telegram)
-        instance.github = validated_data.get('github', instance.github)
-        instance.instagram = validated_data.get('instagram', instance.instagram)
-        instance.image = validated_data.get('image', instance.image)
-        return instance
+class UserRetrieveUpdateDeleteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Users
+        fields = ('id', 'email', 'username', 'first_name', 'last_name',
+                  'phone_number', 'telegram', 'instagram', 'github',
+                  'image')
+        read_only_fields = ('created',)
+
+
+# class TeacherListSerializer(serializers.ModelSerializer):
+#     level = LevelSerializer(read_only=True)
+#     course = CourseSerializer(read_only=True)
+#
+#     class Meta:
+#         model = Teacher
+#         fields = ['id',
+#                   'first_name', 'last_name', 'email', 'phone_number', 'email',
+#                   'course', 'level']

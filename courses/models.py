@@ -24,7 +24,7 @@ class Level(models.Model):
     image = models.ImageField(upload_to='media',
                               max_length=240, null=True, blank=True)
     course = models.ForeignKey(Course, on_delete=models.SET_NULL,
-                               null=True, related_name='level')
+                               null=True, related_name='course')
 
 
 class Lesson(models.Model):
@@ -34,7 +34,7 @@ class Lesson(models.Model):
 
     title = models.CharField(max_length=150, null=True)
     description = models.TextField(null=True)
-    level = models.ForeignKey(Level, on_delete=models.SET_NULL, null=True)
+    level = models.ForeignKey(Level, on_delete=models.SET_NULL, null=True, related_name='level')
     video_url = models.URLField(null=True, blank=True)
     material_url = ArrayField(models.CharField(max_length=250,null=True, blank=True), size=5, null=True, blank=True)
 
