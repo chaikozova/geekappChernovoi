@@ -22,33 +22,3 @@ https://simpleisbetterthancomplex.com/tutorial/2016/08/09/how-to-deploy-django-a
 Посмотреть по ссылке про гугл аутентификацию, которую я скину.
 
 
-
-
-Женя, [14.03.21 14:44]
-class RetrieveUpdateSurveySerializer(serializers.ModelSerializer):
-
-    survey_question = QuestionSerializer(many=True)
-    user = serializers.ReadOnlyField(source='user.email')
-
-    def update(self, instance, validated_data):
-        question_data = validated_data.pop('survey_question')
-        questions = instance.survey_question.all()
-        questions = list(questions)
-        instance.name = validated_data.get('name', instance.name)
-        instance.name_ky = validated_data.get('name_ky', instance.name_ky)
-        instance.description = validated_data.get('description', instance.description)
-        instance.description_ky = validated_data.get('description_ky', instance.description_ky)
-        instance.save()
-
-        for question_data in question_data:
-            question = questions.pop(0)
-            question.text = question_data.get('text', question.text)
-            question.text_ky = question.data.get('text', question.text_ky)
-            question.required = question_data.get('required', question.required)
-            question.question_type = question_data.get('question_type', question.question_type)
-            question.choices = question_data.get('choices', question.choices)
-            question.choices_ky = question_data.get('choices_ky', question.choices_ky)
-            question.variants = question_data.get('variants', question.variants)
-            question.variants_ky = question_data.get('variants_ky', question.variants)
-            question.save()
-        return instance

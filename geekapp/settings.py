@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'user',
     'events',
     'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 
