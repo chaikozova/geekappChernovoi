@@ -37,6 +37,6 @@ class EventSerializer(serializers.ModelSerializer):
         model = Event
         fields = 'id image title description created date_of_event location comments'.split()
 
-    def get_comments(self, obj):
-        comments = Comment.objects.filter(events=obj)
+    def get_comments(self):
+        comments = Comment.objects.filter(events=self)
         return CommentSerializer(comments, many=True).data
