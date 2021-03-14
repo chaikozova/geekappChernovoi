@@ -1,5 +1,5 @@
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin, UserManager
+from django.contrib.auth.models import PermissionsMixin, UserManager, AbstractUser
 from django.db import models
 
 
@@ -16,7 +16,8 @@ USER_TYPE = (
     (CLIENT, 'CLIENT'),
 )
 
-class Users(AbstractBaseUser):
+
+class Users(AbstractUser):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
@@ -30,7 +31,7 @@ class Users(AbstractBaseUser):
     github = models.URLField(max_length=150, blank=True)
     instagram = models.CharField(max_length=150, blank=True)
     image = models.ImageField(upload_to='media', max_length=254, blank=True)
-    coins = models.IntegerField(blank=True)
+    coins = models.IntegerField(blank=True, null=True)
     date_joined = models.DateTimeField('date joined', auto_now_add=True, blank=True)
     is_active = models.BooleanField('active', default=True, blank=True)
     is_staff = models.BooleanField(default=True, blank=True)

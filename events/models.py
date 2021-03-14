@@ -1,6 +1,5 @@
 from django.db import models
 
-from geekapp import settings
 from user.models import Users
 
 
@@ -8,7 +7,7 @@ class Event(models.Model):
     class Meta:
         verbose_name = 'Меропрятие'
         verbose_name_plural = 'Меропрятия'
-    image = models.ImageField(upload_to='media', max_length=240)
+    image = models.ImageField(upload_to='media', max_length=240, blank=True)
     title = models.CharField(max_length=255)
     description = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
@@ -45,7 +44,7 @@ class RatingEvent(models.Model):
         unique_together = [
             'user',
             'event']
-    SCORE_CHOICES = zip(range(1), range(6))
+    SCORE_CHOICES = zip(range(1,6), range(1,6))
     user = models.ForeignKey(Users, on_delete=models.CASCADE, related_name='user')
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='event')
     ratingEvent = models.PositiveSmallIntegerField(choices=SCORE_CHOICES, blank=True)

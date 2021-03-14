@@ -1,21 +1,35 @@
 from rest_framework import serializers
 
-from courses.models import Course, Month
+from courses.models import Course, Level, Lesson
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    month = serializers.SerializerMethodField()
+    level = serializers.SerializerMethodField()
 
     class Meta:
         model = Course
-        fields = 'id logo title month'
+        fields = 'id logo title level'.split()
 
-    def get_month(self, obj):
-        month = Month.objects.filter(course=obj)
-        return MonthSerializer(month, many=True).data
+    def get_level(self):
+        levels = Level.objects.filter(course=self)
+        return LevelSerializer(levels, many=True).data
 
 
-class MonthSerializer(serializers.ModelSerializer):
+class LevelSerializer(serializers.ModelSerializer):
+    lessons = serializers.SerializerMethodField()
+
     class Meta:
-        model = Month
-        fields = 'id number image teacher'.split()
+        model = Level
+        fields = 'id title image teacher lessons'.split()
+
+    def get_lessons(self):
+        lesson = Lesson.objects.filter(level=self)
+        return LessonSerializer(lesson, many=True).data
+
+
+class LessonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lesson
+        fields = 'id title description'.split()
+
+
