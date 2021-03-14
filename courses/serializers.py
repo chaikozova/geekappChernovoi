@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from courses.models import Course, Level, Lesson
-from user.models import Users
 from user.serializers import UserListSerializer
 
 

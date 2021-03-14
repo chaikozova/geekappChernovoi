@@ -1,13 +1,12 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 
-from courses.serializers import LevelSerializer, CourseSerializer
 from user.models import Users
 
 
 class LoginSerializer(serializers.Serializer):
-    email = serializers.CharField(lebel="email", write_only=True)
-    password = serializers.CharField(lebel="password",
+    email = serializers.CharField(label="email", write_only=True)
+    password = serializers.CharField(label="password",
                                      style={'input_type': 'password'},
                                      write_only=True,
                                      trim_whitespace=False)
@@ -37,6 +36,7 @@ class UserListSerializer(serializers.ModelSerializer):
         fields = ('id', 'email', 'username', 'first_name', 'last_name',
                   'phone_number', 'telegram', 'instagram', 'github',
                   'is_staff')
+        read_only_fields = ('created', )
 
 
 class UserRetrieveUpdateDeleteSerializer(serializers.ModelSerializer):
@@ -45,7 +45,7 @@ class UserRetrieveUpdateDeleteSerializer(serializers.ModelSerializer):
         fields = ('id', 'email', 'username', 'first_name', 'last_name',
                   'phone_number', 'telegram', 'instagram', 'github',
                   'image')
-        read_only_fields = ('created',)
+        read_only_fields = ('created', )
 
 
 # class TeacherListSerializer(serializers.ModelSerializer):

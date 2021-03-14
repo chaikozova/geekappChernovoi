@@ -24,7 +24,7 @@ class Level(models.Model):
     image = models.ImageField(upload_to='media',
                               max_length=240, null=True, blank=True)
     course = models.ForeignKey(Course, on_delete=models.SET_NULL,
-                               null=True, related_name='course')
+                               null=True, related_name='level')
 
 
 class Lesson(models.Model):

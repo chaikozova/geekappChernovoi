@@ -22,13 +22,12 @@ USER_TYPE = (
 
 class Users(AbstractUser):
     class Meta:
-        ordering = ['-created']
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 
     user_type = models.IntegerField(choices=USER_TYPE, default=CLIENT, verbose_name='Тип пользователя')
     email = models.EmailField(max_length=250, unique=True, db_index=True, verbose_name='Email')
-    username = models.CharField(max_length=100, null=True, blank=True, verbose_name='Username')
+    username = models.CharField(max_length=100, unique=True, null=True, blank=True, verbose_name='Username')
     first_name = models.CharField(max_length=255, blank=True, null=True, verbose_name='First name')
     last_name = models.CharField(max_length=255, blank=True, null=True, verbose_name='Last name')
     phone_number = models.CharField(max_length=200, blank=True, null=True, verbose_name='Phone number')

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from events.models import Event, Comment, RatingEvent
-from user.serializers import UsersSerializer
+from user.serializers import UserListSerializer
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -50,7 +50,7 @@ class EventSerializer(serializers.ModelSerializer):
 
 class RatingEventSerializer(serializers.ModelSerializer):
     event = EventSerializer(read_only=True)
-    user = UsersSerializer(read_only=True)
+    user = UserListSerializer(read_only=True)
 
     class Meta:
         model = RatingEvent
