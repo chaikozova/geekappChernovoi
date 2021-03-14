@@ -1,5 +1,8 @@
 from django.db import models
 
+from geekapp import settings
+from user.models import Users
+
 
 class Event(models.Model):
     class Meta:
@@ -18,6 +21,9 @@ class Event(models.Model):
     def view_comments(self):
         return Comment.objects.filter(comments=self)
 
+    def get_ratings(self):
+        return RatingEvent.objects.filter(event=self)
+
 
 class Comment(models.Model):
     comment = models.TextField(null=True)
@@ -30,3 +36,19 @@ class Comment(models.Model):
                                on_delete=models.SET_NULL,
                                null=True,
                                related_name='comments')
+
+
+class RatingEvent(models.Model):
+    class Meta:
+        verbose_name = 'Рейтинг'
+        verbose_name_plural = 'Рейтинги'
+        unique_together = [
+            'user',
+            'event']
+    SCORE_CHOICES = zip(range(1), range(6))
+    user = models.ForeignKey(Users, on_delete=models.CASCADE, related_name='user')
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='event')
+    ratingEvent = models.PositiveSmallIntegerField(choices=SCORE_CHOICES, blank=True)
+
+    def __str__(self):
+        return 'Rating(Event =' + str(self.event) + ', Stars =' + str(self.ratingEvent) + ')'
