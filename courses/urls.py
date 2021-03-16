@@ -6,5 +6,7 @@ urlpatterns = [
     path('api/courses/<int:id>/', courses_views.CourseDetailAPIView.as_view()),
     path('api/levels/', courses_views.LevelAPIView.as_view()),
     path('api/levels/<int:id>/', courses_views.LevelDetailAPIView.as_view()),
+    path('api/lessons/', courses_views.LessonAPIView.as_view()),
+    #path('api/levels/<int:id>/', courses_views.LevelDetailAPIView.as_view()),
 
 ]

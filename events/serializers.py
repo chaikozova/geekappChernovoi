@@ -41,16 +41,17 @@ class EventSerializer(serializers.ModelSerializer):
         comments_data = validated_data.pop('comments')
         comments = instance.comments
 
-        instance.image = validated_data.get('image')
-        instance.title = validated_data.get('title')
-        instance.description = validated_data.get('description')
-        instance.created = validated_data.get('created')
-        instance.date_of_event = validated_data.get('date_of_event')
-        instance.location = validated_data.get('location')
-        instance.save()
-        for comments_data in comments_data:
-            comment = comments.pop(0)
-            comment.comment = comments_data.get('comment')
-            comment.created = comments_data.get('created')
-            comment.save()
-        return instance
+        #
+        # instance.image = validated_data.get('image')
+        # instance.title = validated_data.get('title')
+        # instance.description = validated_data.get('description')
+        # instance.created = validated_data.get('created')
+        # instance.date_of_event = validated_data.get('date_of_event')
+        # instance.location = validated_data.get('location')
+        # instance.save()
+        # for comments_data in comments_data:
+        #     comment = comments.pop(0)
+        #     comment.comment = comments_data.get('comment')
+        #     comment.created = comments_data.get('created')
+        #     comment.save()
+        # return instance

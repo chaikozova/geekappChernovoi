@@ -1,53 +1,26 @@
 from rest_framework import generics, mixins
+from rest_framework.response import Response
 
 from courses.models import Course, Level, Lesson
 from courses.serializers import CourseSerializer, LevelSerializer, LessonSerializer
 
 
-class CourseAPIView(generics.GenericAPIView,
-                    mixins.ListModelMixin,
-                    mixins.CreateModelMixin):
+class CourseAPIView(generics.ListCreateAPIView):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
     lookup_field = 'id'
 
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-
-
-class CourseDetailAPIView(generics.GenericAPIView,
-                          mixins.RetrieveModelMixin,
-                          mixins.UpdateModelMixin,
-                          mixins.DestroyModelMixin):
+class CourseDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
     lookup_field = 'id'
 
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
-
-
-class LevelAPIView(generics.GenericAPIView,
-                   mixins.ListModelMixin,
-                   mixins.CreateModelMixin):
+class LevelAPIView(generics.ListCreateAPIView):
     serializer_class = LevelSerializer
     queryset = Level.objects.all()
     lookup_field = "id"
-
-    def get(self, request, *args, **kwargs):
-        return self.list(request)
-
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
 
 
 class LevelDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
@@ -62,3 +35,4 @@ class LessonAPIView(generics.ListCreateAPIView):
     """
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
+    lookup_field = 'id'
