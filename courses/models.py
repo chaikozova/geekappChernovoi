@@ -34,6 +34,6 @@ class Lesson(models.Model):
 
     title = models.CharField(max_length=150, null=True)
     description = models.TextField(null=True)
-    level = models.ForeignKey(Level, on_delete=models.SET_NULL, null=True, related_name='level')
+    level = models.ForeignKey(Level, on_delete=models.SET_NULL, null=True, related_name='lessons')
     video_url = models.URLField(null=True, blank=True)
     material_url = ArrayField(models.CharField(max_length=250,null=True, blank=True), size=5, null=True, blank=True)

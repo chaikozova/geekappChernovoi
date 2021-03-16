@@ -1,15 +1,25 @@
+from decimal import Decimal
+
+from django.db.models import Avg
 from rest_framework import serializers
-from events.models import Event, Comment, RatingEvent
-from users.serializers import UserListSerializer
+from events.models import Event, Comment
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    events = serializers.PrimaryKeyRelatedField(queryset=Event.objects.all())
+
     class Meta:
         model = Comment
-        fields = ('id', 'comment', 'created')
+        fields = ('id', 'comment', 'rate', 'created', 'events')
 
     def create(self, validated_data):
-        return Comment.objects.create(**validated_data)
+        comment = Comment.objects.create(**validated_data)
+        event = Event.objects.get()
+        avg = Comment.objects.all().aggregate(Avg('rate'))
+        print(avg)
+        event.ratting = Decimal(avg['rate__avg'])
+        event.save()
+        return comment
 
     def update(self, instance, validated_data):
         instance.comment = validated_data.get('comment')
@@ -22,12 +32,10 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ('id', 'image', 'title', 'description', 'created', 'date_of_event', 'location', 'comments')
+        fields = ('id', 'image', 'title', 'description', 'ratting', 'created', 'date_of_event', 'location', 'comments')
 
     def create(self, validated_data):
-        comments_data = validated_data.pop('comments')
-        event = Event.objects.create(**validated_data)
-        Comment.objects.create(event=event, **comments_data)
+        return Event.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
         comments_data = validated_data.pop('comments')
@@ -46,18 +54,3 @@ class EventSerializer(serializers.ModelSerializer):
             comment.created = comments_data.get('created')
             comment.save()
         return instance
-
-
-class RatingEventSerializer(serializers.ModelSerializer):
-    event = EventSerializer(read_only=True)
-    user = UserListSerializer(read_only=True)
-
-    class Meta:
-        model = RatingEvent
-        fields =('id', 'event', 'ratingEvent', 'user')
-
-    def create(self, validated_data):
-        return RatingEvent.objects.create(**validated_data)
-
-    # def update(self, instance, validated_data):
-    #     instance.event = validated_data.get('event', instance.event)

@@ -1,7 +1,7 @@
 from rest_framework import generics, mixins
 
-from courses.models import Course, Level
-from courses.serializers import CourseSerializer, LevelSerializer
+from courses.models import Course, Level, Lesson
+from courses.serializers import CourseSerializer, LevelSerializer, LessonSerializer
 
 
 class CourseAPIView(generics.GenericAPIView,
@@ -50,19 +50,15 @@ class LevelAPIView(generics.GenericAPIView,
         return self.create(request, *args, **kwargs)
 
 
-class LevelDetailAPIView(generics.GenericAPIView,
-                         mixins.RetrieveModelMixin,
-                         mixins.UpdateModelMixin,
-                         mixins.DestroyModelMixin):
+class LevelDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = LevelSerializer
     queryset = Level.objects.all()
     lookup_field = "id"
 
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+class LessonAPIView(generics.ListCreateAPIView):
+    """
+    List of lessons in 1 month
+    """
+    serializer_class = LessonSerializer
+    queryset = Lesson.objects.all()

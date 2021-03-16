@@ -1,7 +1,7 @@
 from rest_framework import generics, mixins
 
-from events.models import Event
-from events.serializers import EventSerializer
+from events.models import Event, Comment
+from events.serializers import EventSerializer, CommentSerializer
 
 
 class EventAPIView(generics.GenericAPIView,
@@ -18,19 +18,15 @@ class EventAPIView(generics.GenericAPIView,
         return self.create(request, *args, **kwargs)
 
 
-class EventDetailAPIView(generics.GenericAPIView,
-                         mixins.RetrieveModelMixin,
-                         mixins.UpdateModelMixin,
-                         mixins.DestroyModelMixin):
+class EventDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = EventSerializer
     queryset = Event.objects.all()
     lookup_field = 'id'
 
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+class CommentView(generics.ListCreateAPIView):
+    """
+    Bla bla
+    """
+    serializer_class = CommentSerializer
+    queryset = Comment.objects.all()

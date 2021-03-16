@@ -1,16 +1,18 @@
 from rest_framework import serializers
 
 from courses.models import Course, Level, Lesson
-from users.serializers import UserListSerializer
+from users.serializers import TeacherSerializer
 
 
 class LessonSerializer(serializers.ModelSerializer):
+    level = serializers.PrimaryKeyRelatedField(queryset=Level.objects.all())
+
     class Meta:
         model = Lesson
-        fields = ('id', 'title', 'description', 'video_url', 'material_url')
+        fields = ('level', 'id', 'title', 'description', 'video_url', 'material_url')
 
-    # def create(self, validated_data):
-    #     return Lesson.objects.create(**validated_data)
+    def create(self, validated_data):
+        return Lesson.objects.create(**validated_data)
 
     # def update(self, instance, validated_data):
     #     instance.title = validated_data.get('title', instance.title)
@@ -20,7 +22,7 @@ class LessonSerializer(serializers.ModelSerializer):
 
 class LevelSerializer(serializers.ModelSerializer):
     lessons = LessonSerializer(read_only=True, many=True)
-    teacher = UserListSerializer(read_only=True)
+    teacher = TeacherSerializer(read_only=True)
 
     class Meta:
         model = Level
@@ -29,7 +31,6 @@ class LevelSerializer(serializers.ModelSerializer):
     # def create(self, validated_data):
     #     lesson_data = validated_data.pop('lessons')
     #     teacher_data = validated_data.pop('teacher')
-    #     level = Level.objects.create(**validated_data)
     #     teacher = Users.objects.get_or_create()
     #     Lesson.objects.create(level=level, teacher=teacher, **lesson_data)
     #
