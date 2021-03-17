@@ -11,6 +11,11 @@ class Course(models.Model):
     title = models.CharField(max_length=240)
     description = models.TextField(null=True, blank=True)
 
+    @property
+    def levels_count(self):
+        levels = Level.objects.filter(course=self.pk)
+        return levels.count()
+
 
 class Level(models.Model):
     class Meta:
@@ -25,6 +30,11 @@ class Level(models.Model):
                               max_length=240, null=True, blank=True)
     course = models.ForeignKey(Course, on_delete=models.SET_NULL,
                                null=True, related_name='level')
+
+    @property
+    def lessons_count(self):
+        lessons = Lesson.objects.filter(level=self.pk)
+        return lessons.count()
 
 
 class Lesson(models.Model):
